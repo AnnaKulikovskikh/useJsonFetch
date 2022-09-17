@@ -1,15 +1,24 @@
 import './App.css'
-import Error from "./components/Error"
-import Index from "./components/Index"
-import Success from "./components/Success"
-
+import {useEffect} from 'react'
+import Result from "./components/Result"
 
 function App() {
+
+  //const url = "http://localhost:7777/data"
+  //const url = "process.env.REACT_APP_DATA_URL/data"
+
+  // useEffect(() => {
+  //   fetch(url)
+  //       .then(res => res.json())
+  //       .then(data => console.log(data))
+  //   }, [])
+  
+
   return (
     <div className="App">
-      <Success/>
-      <Error/>
-      <Index/>
+      <Result url = 'data'/>
+      <Result url = 'error'/>
+      <Result url = 'loading'/>
     </div>
   )
 }
