@@ -2,31 +2,39 @@ import {useState, useEffect} from "react"
 //const JsonContext = React.createContext()
 
 function useJsonFetch(url, opts=[]) {
-    const [data, setData] = useState([])
-    const [loading, setLosdindg] = useState(false)
+    const [data, setData] = useState(null)
+    const [loading, setLoadindg] = useState(false)
     const [error, setError] = useState(null)
+      
+    // useEffect( () => {
+    //     setLoadindg(true)
+    //     fetch(url, opts)
+    //         .then(res => res.json())
+    //         .then(data => check(data))
+    //         .catch(err => setError(err))
+    //         .finally(() =>setLoadindg(false) )
+    // }, [url])
 
-    useEffect(()=>{
-        fetch(url, opts)
-          .then(check)
-          .then((res => {
-            setData(res)
-          })
-          .catch((e) => {
-            setError(e)
-          })
-          .finally(() => setLosdindg(false))
-          )
+    useEffect( () => {
+        setLoadindg(true)
+        fetch(url)
+            .then(res => res.json())
+            .then(data => check(data))
+            .catch(err => console.log("error"))
+            .finally(() => setLoadindg(false))
     }, [url])
 
     function check(res) {
         switch (res.status) {
             case 200:
-            case 201:
+            case "ok":
                 setError(null)
-                return res.json()
+                setData(res.status)
+                break
             case 400:
+            case "Internal Error":
                 setError(res.status)
+                setData(null)
                 break
             default:
                 setError(res.status)
@@ -34,26 +42,7 @@ function useJsonFetch(url, opts=[]) {
         }
     }
 
-    // useEffect(()=>{
-    //     const fetchData = async() => {
-    //         setLosdindg(true)
-    //         try {
-    //             const response = await fetch(url)
-    //             if (!response.ok) {
-    //                 throw new Error(response.statusText)
-    //             }
-    //             const data = await response.json
-    //             setData(data)
-    //             setError(null)
-    //         } catch(e){
-    //             setError(e)
-    //         } finally {
-    //             setLosdindg(false)
-    //         }
-    //     }
-    // },[])
-
-    return {data, loading, error}
+    return [data, loading, error]
 
 }
 
